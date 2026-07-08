@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#F6F4EF;color:#3A4450;font-family:'Spectral',Georgia,serif;-webkit-font-smoothing:antialiased;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  a{color:#007E80;text-decoration:none}
+  a:hover{color:#00A0A0}
+  ::selection{background:#00A0A0;color:#fff}
+  .print-only{display:none}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @media print{
+    @page{margin:14mm}
+    .rail,.actions,.scrollhint{display:none !important}
+    .main{margin-left:0 !important;max-width:100% !important}
+    .cover{min-height:auto !important;break-after:page}
+    .section,.band{break-before:page}
+    .revealable{opacity:1 !important;transform:none !important}
+    .screen-only{display:none !important}
+    .print-only{display:block !important}
+  }
+</style>
+</helmet>
+<div ref="{{ setRoot }}">
+
+  <!-- ===================== LEFT PROGRESS RAIL ===================== -->
+  <nav class="rail" style="position:fixed;top:0;left:0;width:74px;height:100vh;background:#fff;border-right:1px solid #E6E1D8;display:flex;flex-direction:column;align-items:center;padding:20px 0;z-index:40">
+    <div style="width:34px;height:34px;border-radius:8px;background:#007E80;display:flex;align-items:center;justify-content:center;margin-bottom:22px">
+      <span style="font:900 15px 'Archivo',sans-serif;color:#fff">H</span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0">
+      <a class="raildot" data-target="sec-1" href="#sec-1" style="width:32px;height:32px;border-radius:50%;background:#00A0A0;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">1</a>
+      <span class="railline" style="width:2px;height:22px;background:#E6E1D8;transition:background .3s"></span>
+      <a class="raildot" data-target="sec-2" href="#sec-2" style="width:32px;height:32px;border-radius:50%;background:transparent;border:2px solid #CFC8BB;color:#A89F8E;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">2</a>
+      <span class="railline" style="width:2px;height:22px;background:#E6E1D8;transition:background .3s"></span>
+      <a class="raildot" data-target="sec-3" href="#sec-3" style="width:32px;height:32px;border-radius:50%;background:transparent;border:2px solid #CFC8BB;color:#A89F8E;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">3</a>
+      <span class="railline" style="width:2px;height:22px;background:#E6E1D8;transition:background .3s"></span>
+      <a class="raildot" data-target="sec-4" href="#sec-4" style="width:32px;height:32px;border-radius:50%;background:transparent;border:2px solid #CFC8BB;color:#A89F8E;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">4</a>
+      <span class="railline" style="width:2px;height:22px;background:#E6E1D8;transition:background .3s"></span>
+      <a class="raildot" data-target="sec-5" href="#sec-5" style="width:32px;height:32px;border-radius:50%;background:transparent;border:2px solid #CFC8BB;color:#A89F8E;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">5</a>
+      <span class="railline" style="width:2px;height:22px;background:#E6E1D8;transition:background .3s"></span>
+      <a class="raildot" data-target="sec-6" href="#sec-6" style="width:32px;height:32px;border-radius:50%;background:transparent;border:2px solid #CFC8BB;color:#A89F8E;display:flex;align-items:center;justify-content:center;font:800 13px 'Archivo',sans-serif;transition:all .3s">6</a>
+    </div>
+    <a href="#cover" style="writing-mode:vertical-rl;font:600 9px 'Archivo',sans-serif;letter-spacing:.18em;color:#B8AF9E;text-transform:uppercase;margin-top:14px">Inicio</a>
+  </nav>
+
+  <!-- floating print action -->
+  <div class="actions" style="position:fixed;top:22px;right:26px;z-index:41">
+    <button onClick="{{ doPrint }}" style="display:inline-flex;align-items:center;gap:7px;background:#3A4450;color:#fff;border:none;border-radius:22px;padding:9px 16px;font:700 11px 'Archivo',sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 4px 14px rgba(58,68,80,.28)">
+      <span style="font-size:13px">⎙</span> Imprimir / PDF
+    </button>
+  </div>
+
+  <!-- ===================== MAIN COLUMN ===================== -->
+  <main class="main" style="margin-left:74px">
+
+    <!-- COVER -->
+    <header class="cover" id="cover" style="min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(48px,7vh,80px) 8vw 60px;position:relative;background:radial-gradient(120% 90% at 100% 0%, #EFF6F5 0%, #F6F4EF 55%)">
+      <img src="assets/logo-fahu.png" alt="Facultad de Humanidades USACH" style="width:min(780px,80vw);height:auto;align-self:flex-start;display:block;margin-bottom:clamp(22px,3.5vh,40px)">
+      <div style="font:700 13px 'Archivo',sans-serif;letter-spacing:.28em;color:#EF7A00;text-transform:uppercase;margin-bottom:20px">Cuenta Pública&nbsp;·&nbsp;2024 — 2026</div>
+      <h1 style="font:900 clamp(52px,9vw,132px)/0.94 'Archivo',sans-serif;color:#007E80;letter-spacing:-.02em;margin:0 0 8px">Investigación</h1>
+      <div style="width:88px;height:5px;background:#EF7A00;margin:14px 0 26px;border-radius:3px"></div>
+      <p style="font:500 clamp(17px,2.1vw,23px)/1.5 'Spectral',serif;color:#4A5460;max-width:620px;margin:0 0 14px">Un recuento del modo en que el Vicedecanato de Investigación y Postgrado ha generado capacidades y acompañado el trabajo investigativo de las académicas y académicos de la Facultad.</p>
+      <div style="font:400 15px 'Spectral',serif;color:#8A8272;font-style:italic">Vicedecanato de Investigación y Postgrado · Facultad de Humanidades, USACH</div>
+      <div class="scrollhint" style="position:absolute;bottom:34px;left:8vw;font:600 10px 'Archivo',sans-serif;letter-spacing:.2em;color:#B8AF9E;text-transform:uppercase">Desliza para comenzar ↓</div>
+    </header>
+
+    <!-- ===== INTRODUCCIÓN ===== -->
+    <section class="band" id="intro" style="padding:clamp(56px,8vh,110px) 8vw;background:#ffffff;border-top:1px solid #EFEAE1">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;max-width:940px">
+        <div style="display:inline-block;font:700 11px 'Archivo',sans-serif;letter-spacing:.22em;color:#EF7A00;text-transform:uppercase;margin-bottom:16px">Introducción</div>
+        <h2 style="font:800 clamp(26px,3.4vw,40px)/1.12 'Archivo',sans-serif;color:#3A4450;margin:0 0 22px;letter-spacing:-.01em;max-width:760px">Lorem ipsum dolor sit amet consectetur adipiscing</h2>
+        <div style="display:grid;grid-template-columns:1.25fr 0.75fr;gap:34px;align-items:start">
+          <div>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.66 'Spectral',serif;color:#5A6470;margin:0 0 15px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.66 'Spectral',serif;color:#5A6470;margin:0 0 15px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <blockquote style="margin:22px 0 0;padding:6px 0 6px 20px;border-left:4px solid #EF7A00;font:500 italic clamp(16px,1.9vw,20px)/1.5 'Spectral',serif;color:#3A4450">“Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.”</blockquote>
+          </div>
+          <div style="position:relative;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #E6E1D8">
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="intro-foto" shape="rect" placeholder="Arrastra una imagen o retrato de apertura" hint-size="100%,100%"></x-import>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 01 ===== -->
+    <section class="section" id="sec-1" data-num="1" style="padding:clamp(56px,8vh,110px) 8vw">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#00A0A0">01</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">Somos un apoyo a la investigación</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">Oportunidades y fuentes de financiamiento, los consejos que articulan la política de investigación de la Facultad, los patrocinios entregados y el acceso a recursos para investigar.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:40px;max-width:940px">
+        <!-- subsection placeholder grid: a-g -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">a · Fuentes de financiamiento</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Convocatorias de investigación</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + imagen + gráfico</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">b · Consejo de Investigación</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Gobernanza</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + infografía</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">c · Consejo de Revistas</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Publicaciones científicas</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + infografía</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">d · Patrocinios</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Apoyo a postulaciones</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + gráficos</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">e · Áreas OCDE</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Líneas de investigación</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + gráficos</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">f · Recursos digitales</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Acceso a bases y bibliografía</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + gráfico</div></div>
+          <div style="background:#fff;border:1px solid #E6E1D8;border-radius:12px;padding:18px 20px"><div style="font:700 11px 'Archivo',sans-serif;color:#00A0A0;text-transform:uppercase;letter-spacing:.08em">g · Talleres Biblioteca</div><div style="font:500 15px 'Archivo',sans-serif;color:#3A4450;margin:6px 0 4px">Formación académica</div><div style="font:400 13px/1.45 'Spectral',serif;color:#8A8272">Narrativa + imágenes</div></div>
+        </div>
+        <!-- ============ SUBSECCIÓN a ============ -->
+        <div style="margin-top:40px;padding-top:34px;border-top:1px solid #E6E1D8">
+          <div style="display:flex;align-items:baseline;gap:13px;margin-bottom:18px">
+            <span style="font:900 32px/0.8 'Archivo',sans-serif;color:#00A0A0">a</span>
+            <h3 style="font:800 clamp(20px,2.4vw,26px)/1.12 'Archivo',sans-serif;color:#3A4450;margin:0;letter-spacing:-.01em">Informamos dónde puede financiarse nuestra investigación</h3>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:stretch;margin-bottom:30px">
+            <div style="flex:1 1 400px;min-width:290px">
+              <p style="font:400 clamp(15px,1.55vw,17px)/1.62 'Spectral',serif;color:#5A6470;margin:0 0 13px">Creamos un <b style="font-weight:600;color:#3A4450">mecanismo permanente</b> que informa oportunidades de financiamiento de fuentes <b style="font-weight:600;color:#3A4450">convencionales y no convencionales</b>, tanto <b style="font-weight:600;color:#3A4450">nacionales como internacionales</b>.</p>
+              <p style="font:400 clamp(15px,1.55vw,17px)/1.62 'Spectral',serif;color:#5A6470;margin:0">Cada semana revisamos los portales de las principales instituciones y difundimos una selección por <b style="font-weight:600;color:#3A4450">correo electrónico</b> al cuerpo académico. Todas las convocatorias quedan registradas y disponibles en la sección <b style="font-weight:600;color:#3A4450">Becas y Convocatorias</b> del sitio de la Facultad.</p>
+            </div>
+            <div class="screen-only" style="flex:1 1 320px;min-width:280px;display:flex;flex-direction:column">
+              <div style="background:#DED9D0;padding:8px 11px;display:flex;align-items:center;gap:6px;border-radius:10px 10px 0 0"><span style="width:9px;height:9px;border-radius:50%;background:#C6BEB1"></span><span style="width:9px;height:9px;border-radius:50%;background:#C6BEB1"></span><span style="width:9px;height:9px;border-radius:50%;background:#C6BEB1"></span><span style="margin-left:6px;flex:1;background:#F1EDE6;border-radius:5px;height:19px;font:500 10px/19px 'IBM Plex Mono',monospace;color:#8A8272;padding:0 9px;overflow:hidden;white-space:nowrap">fahu.usach.cl/becas_y_convocatorias/</span></div>
+              <div style="position:relative;flex:1;min-height:210px;border:1px solid #E6E1D8;border-top:none;border-radius:0 0 10px 10px;overflow:hidden">
+                <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="site-becas" shape="rect" placeholder="Arrastra una captura de la sección Becas y Convocatorias" hint-size="100%,100%"></x-import>
+              </div>
+              <a href="https://fahu.usach.cl/becas_y_convocatorias/" target="_blank" style="font:600 11px 'Archivo',sans-serif;color:#007E80;margin-top:8px;align-self:flex-start">Ver sección en el sitio →</a>
+            </div>
+          </div>
+
+          <!-- DASHBOARD interactivo (web) -->
+          <div id="dash1" class="screen-only" style="background:linear-gradient(180deg,#F0F7F6 0%,#ffffff 42%);border:1px solid #DCE7E5;border-radius:16px;padding:26px 30px">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:20px">
+              <div style="font:800 clamp(16px,2vw,19px) 'Archivo',sans-serif;color:#3A4450">¿De dónde vienen las oportunidades?</div>
+              <div style="font:600 10px 'Archivo',sans-serif;letter-spacing:.14em;color:#EF7A00;text-transform:uppercase">Catastro Periódico · desde 2024</div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px">
+              <div style="flex:1;min-width:130px;background:#00A0A0;border-radius:13px;padding:16px;color:#fff"><div style="font:800 clamp(28px,4vw,36px)/0.9 'Archivo',sans-serif">177</div><div style="font:500 11.5px 'Archivo',sans-serif;opacity:.92;margin-top:6px">convocatorias informadas</div></div>
+              <div style="flex:1;min-width:130px;background:#EF7A00;border-radius:13px;padding:16px;color:#fff"><div style="font:800 clamp(28px,4vw,36px)/0.9 'Archivo',sans-serif">48</div><div style="font:500 11.5px 'Archivo',sans-serif;opacity:.92;margin-top:6px">instituciones</div></div>
+              <div style="flex:1;min-width:130px;background:#3A4450;border-radius:13px;padding:16px;color:#fff"><div style="font:800 clamp(28px,4vw,36px)/0.9 'Archivo',sans-serif">14<span style="font-size:.6em">+</span></div><div style="font:500 11.5px 'Archivo',sans-serif;opacity:.92;margin-top:6px">países + organismos int'l</div></div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+              <button data-view="region" style="font:700 11.5px 'Archivo',sans-serif;border:none;border-radius:20px;padding:7px 15px;cursor:pointer;background:#00A0A0;color:#fff">Por región</button>
+              <button data-view="pais" style="font:700 11.5px 'Archivo',sans-serif;border:none;border-radius:20px;padding:7px 15px;cursor:pointer;background:#EDE8DF;color:#8A8272">Por país</button>
+              <button data-view="inst" style="font:700 11.5px 'Archivo',sans-serif;border:none;border-radius:20px;padding:7px 15px;cursor:pointer;background:#EDE8DF;color:#8A8272">Por institución</button>
+            </div>
+            <div id="dash1-body" style="min-height:236px"></div>
+            <div style="margin-top:18px;padding-top:14px;border-top:1px dashed #D8CFBE;font:italic 400 12px 'Spectral',serif;color:#9A9384">Pasa el cursor sobre las barras para ver el detalle. Fuente: catastro del Vicedecanato de Investigación y Postgrado, 2024–2026.</div>
+          </div>
+
+          <!-- VERSIÓN IMPRESA (PDF) -->
+          <div class="print-only" style="border:1px solid #E6E1D8;border-radius:6px;padding:22px 26px">
+            <div style="font:italic 400 12px 'Spectral',serif;color:#8A8272">Tabla 1</div>
+            <div style="font:700 15px 'Archivo',sans-serif;color:#3A4450;margin:2px 0 14px">Convocatorias informadas por país e institución, 2024–2026</div>
+            <table style="width:100%;border-collapse:collapse">
+              <thead><tr style="border-bottom:2px solid #3A4450">
+                <th style="text-align:left;font:600 10px 'Archivo',sans-serif;color:#8A8272;text-transform:uppercase;letter-spacing:.06em;padding:0 0 7px">País / origen</th>
+                <th style="text-align:right;font:600 10px 'Archivo',sans-serif;color:#8A8272;text-transform:uppercase;letter-spacing:.06em;padding:0 0 7px">Instituciones</th>
+                <th style="text-align:right;font:600 10px 'Archivo',sans-serif;color:#8A8272;text-transform:uppercase;letter-spacing:.06em;padding:0 0 7px">Convocatorias</th>
+              </tr></thead>
+              <tbody id="dash1-print-body"></tbody>
+              <tfoot><tr style="border-top:2px solid #3A4450">
+                <td style="padding-top:7px;font:700 12px 'Archivo',sans-serif;color:#3A4450">TOTAL</td>
+                <td style="padding-top:7px;text-align:right;font:700 12px 'IBM Plex Mono',monospace;color:#3A4450">48</td>
+                <td style="padding-top:7px;text-align:right;font:700 12px 'IBM Plex Mono',monospace;color:#3A4450">177</td>
+              </tr></tfoot>
+            </table>
+            <div style="margin-top:12px;font:italic 400 11.5px 'Spectral',serif;color:#9A9384">Por región: Chile 59 · Europa 69 · Latinoamérica y regional 29 · Norteamérica 17 · Asia 3. Fuente: catastro del Vicedecanato de Investigación y Postgrado, 2024–2026.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 02 ===== -->
+    <section class="section" id="sec-2" data-num="2" style="padding:clamp(56px,8vh,110px) 8vw;background:#FBFAF7">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#EF7A00">02</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">El cultivo de la disciplina, conexiones para la interdisciplina</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">Rendimiento de adjudicaciones, temas emergentes, áreas OCDE y los vínculos que tejen la interdisciplina en la Facultad.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:44px;max-width:940px">
+        <div style="display:inline-block;font:600 10px 'Archivo',sans-serif;letter-spacing:.16em;color:#B96C13;text-transform:uppercase;background:#FBF3EA;border-radius:20px;padding:5px 12px;margin-bottom:18px">Vista previa de maquetación</div>
+        <p style="font:400 clamp(15px,1.6vw,18px)/1.6 'Spectral',serif;color:#5A6470;max-width:680px;margin:0 0 26px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:stretch;margin-bottom:24px">
+          <div>
+            <h4 style="font:700 17px 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px">Lorem ipsum dolor sit</h4>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0 0 12px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0">Sunt in culpa qui officia deserunt mollit anim id est laborum, sed ut perspiciatis unde omnis iste natus error.</p>
+          </div>
+          <div style="min-height:230px;border:1.5px dashed #C9C1B2;border-radius:12px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#F1EDE5,#F1EDE5 11px,#E8E2D8 11px,#E8E2D8 22px)"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#9A9384">[ imagen ]</span></div>
+        </div>
+        <div style="min-height:280px;border:1.5px dashed rgba(239,122,0,.4);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:repeating-linear-gradient(135deg,#FBF4EC,#FBF4EC 11px,#F6EBDD 11px,#F6EBDD 22px)">
+          <span style="font:600 12px 'IBM Plex Mono',monospace;color:#C05F00">[ gráfico / diagrama ]</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#B08A5B">adjudicaciones · nube de palabras · diagrama de interdisciplina</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 03 ===== -->
+    <section class="section" id="sec-3" data-num="3" style="padding:clamp(56px,8vh,110px) 8vw">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#00A0A0">03</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">Plataformas para la asociatividad</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">El reglamento de grupos de investigación y los mecanismos que fomentan el trabajo colaborativo.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:44px;max-width:940px">
+        <div style="display:inline-block;font:600 10px 'Archivo',sans-serif;letter-spacing:.16em;color:#2C7E7E;text-transform:uppercase;background:#EEF6F5;border-radius:20px;padding:5px 12px;margin-bottom:18px">Vista previa de maquetación</div>
+        <p style="font:400 clamp(15px,1.6vw,18px)/1.6 'Spectral',serif;color:#5A6470;max-width:680px;margin:0 0 26px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:28px;align-items:stretch;margin-bottom:24px">
+          <div style="min-height:230px;border:1.5px dashed #C9C1B2;border-radius:12px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#F1EDE5,#F1EDE5 11px,#E8E2D8 11px,#E8E2D8 22px)"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#9A9384">[ imagen ]</span></div>
+          <div>
+            <h4 style="font:700 17px 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px">Lorem ipsum dolor sit</h4>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0 0 12px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0">Sunt in culpa qui officia deserunt mollit anim id est laborum, sed ut perspiciatis unde omnis iste natus error.</p>
+          </div>
+        </div>
+        <div style="min-height:280px;border:1.5px dashed rgba(0,160,160,.4);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:repeating-linear-gradient(135deg,#EFF6F5,#EFF6F5 11px,#E4F0EF 11px,#E4F0EF 22px)">
+          <span style="font:600 12px 'IBM Plex Mono',monospace;color:#007E80">[ gráfico / diagrama ]</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#6E9C97">infografía + flujograma del reglamento</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 04 ===== -->
+    <section class="section" id="sec-4" data-num="4" style="padding:clamp(56px,8vh,110px) 8vw;background:#FBFAF7">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#EF7A00">04</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">Investigación y vida estudiantil</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">Revisión de tesis, temáticas, el vínculo entre proyectos y tesis, y la voz estudiantil recogida en encuestas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:44px;max-width:940px">
+        <div style="display:inline-block;font:600 10px 'Archivo',sans-serif;letter-spacing:.16em;color:#B96C13;text-transform:uppercase;background:#FBF3EA;border-radius:20px;padding:5px 12px;margin-bottom:18px">Vista previa de maquetación</div>
+        <p style="font:400 clamp(15px,1.6vw,18px)/1.6 'Spectral',serif;color:#5A6470;max-width:680px;margin:0 0 26px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:stretch;margin-bottom:24px">
+          <div>
+            <h4 style="font:700 17px 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px">Lorem ipsum dolor sit</h4>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0 0 12px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0">Sunt in culpa qui officia deserunt mollit anim id est laborum, sed ut perspiciatis unde omnis iste natus error.</p>
+          </div>
+          <div style="min-height:230px;border:1.5px dashed #C9C1B2;border-radius:12px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#F1EDE5,#F1EDE5 11px,#E8E2D8 11px,#E8E2D8 22px)"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#9A9384">[ imagen ]</span></div>
+        </div>
+        <div style="min-height:280px;border:1.5px dashed rgba(239,122,0,.4);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:repeating-linear-gradient(135deg,#FBF4EC,#FBF4EC 11px,#F6EBDD 11px,#F6EBDD 22px)">
+          <span style="font:600 12px 'IBM Plex Mono',monospace;color:#C05F00">[ gráfico / diagrama ]</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#B08A5B">flujograma de tesis · gráficos de temáticas y encuestas</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 05 ===== -->
+    <section class="section" id="sec-5" data-num="5" style="padding:clamp(56px,8vh,110px) 8vw">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#00A0A0">05</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">Diversificación cultural</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">Historial de actividades y la liberación del libro; en la versión web, con espacio para imágenes y videos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:44px;max-width:940px">
+        <div style="display:inline-block;font:600 10px 'Archivo',sans-serif;letter-spacing:.16em;color:#2C7E7E;text-transform:uppercase;background:#EEF6F5;border-radius:20px;padding:5px 12px;margin-bottom:18px">Vista previa de maquetación</div>
+        <p style="font:400 clamp(15px,1.6vw,18px)/1.6 'Spectral',serif;color:#5A6470;max-width:680px;margin:0 0 26px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:28px;align-items:stretch;margin-bottom:24px">
+          <div style="min-height:230px;border:1.5px dashed #C9C1B2;border-radius:12px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#F1EDE5,#F1EDE5 11px,#E8E2D8 11px,#E8E2D8 22px)"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#9A9384">[ imagen / video ]</span></div>
+          <div>
+            <h4 style="font:700 17px 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px">Lorem ipsum dolor sit</h4>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0 0 12px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0">Sunt in culpa qui officia deserunt mollit anim id est laborum, sed ut perspiciatis unde omnis iste natus error.</p>
+          </div>
+        </div>
+        <div style="min-height:280px;border:1.5px dashed rgba(0,160,160,.4);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:repeating-linear-gradient(135deg,#EFF6F5,#EFF6F5 11px,#E4F0EF 11px,#E4F0EF 22px)">
+          <span style="font:600 12px 'IBM Plex Mono',monospace;color:#007E80">[ galería / video ]</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#6E9C97">galería de actividades + video (versión web)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 06 ===== -->
+    <section class="section" id="sec-6" data-num="6" style="padding:clamp(56px,8vh,110px) 8vw;background:#FBFAF7">
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease">
+        <div style="display:flex;align-items:flex-start;gap:22px;max-width:940px">
+          <span style="font:900 clamp(46px,7vw,88px)/0.8 'Archivo',sans-serif;color:#EF7A00">06</span>
+          <div style="padding-top:4px">
+            <h2 style="font:800 clamp(28px,3.6vw,44px)/1.05 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px;letter-spacing:-.01em">El libro como medio</h2>
+            <p style="font:400 clamp(15px,1.6vw,18px)/1.55 'Spectral',serif;color:#6A6355;max-width:640px;margin:0">La creación y continuidad de la Colección FAHU: libros publicados, autorías y las áreas que la componen.</p>
+          </div>
+        </div>
+      </div>
+      <div class="revealable" data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .7s ease .1s,transform .7s ease .1s;margin-top:44px;max-width:940px">
+        <div style="display:inline-block;font:600 10px 'Archivo',sans-serif;letter-spacing:.16em;color:#B96C13;text-transform:uppercase;background:#FBF3EA;border-radius:20px;padding:5px 12px;margin-bottom:18px">Vista previa de maquetación</div>
+        <p style="font:400 clamp(15px,1.6vw,18px)/1.6 'Spectral',serif;color:#5A6470;max-width:680px;margin:0 0 26px">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:stretch;margin-bottom:24px">
+          <div>
+            <h4 style="font:700 17px 'Archivo',sans-serif;color:#3A4450;margin:0 0 10px">Lorem ipsum dolor sit</h4>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0 0 12px">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+            <p style="font:400 15px/1.62 'Spectral',serif;color:#5A6470;margin:0">Sunt in culpa qui officia deserunt mollit anim id est laborum, sed ut perspiciatis unde omnis iste natus error.</p>
+          </div>
+          <div style="min-height:230px;border:1.5px dashed #C9C1B2;border-radius:12px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#F1EDE5,#F1EDE5 11px,#E8E2D8 11px,#E8E2D8 22px)"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#9A9384">[ imagen / portada ]</span></div>
+        </div>
+        <div style="min-height:280px;border:1.5px dashed rgba(239,122,0,.4);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:repeating-linear-gradient(135deg,#FBF4EC,#FBF4EC 11px,#F6EBDD 11px,#F6EBDD 22px)">
+          <span style="font:600 12px 'IBM Plex Mono',monospace;color:#C05F00">[ gráfico / diagrama ]</span>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#B08A5B">catálogo Colección FAHU · nube de palabras · autorías</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="padding:48px 8vw 60px;background:#3A4450;color:#CFD6DC">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-end;max-width:940px">
+        <div>
+          <div style="font:800 18px 'Archivo',sans-serif;color:#fff;margin-bottom:6px">Facultad de Humanidades · USACH</div>
+          <div style="font:400 14px 'Spectral',serif;color:#9EA8B0">Vicedecanato de Investigación y Postgrado</div>
+        </div>
+        <div style="font:600 11px 'Archivo',sans-serif;letter-spacing:.14em;color:#7E8A93;text-transform:uppercase">Cuenta Pública 2024 — 2026</div>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      setRoot: (el) => { this.rootEl = el; },
+      doPrint: () => window.print(),
+    };
+  }
+  componentDidMount() {
+    const root = this.rootEl || document;
+    const dots = [...root.querySelectorAll('.raildot')];
+    const lines = [...root.querySelectorAll('.railline')];
+    const sections = [...root.querySelectorAll('.section')];
+    const setActive = (idx) => {
+      dots.forEach((d, i) => {
+        const on = i === idx;
+        d.style.background = on ? '#00A0A0' : 'transparent';
+        d.style.border = on ? 'none' : '2px solid #CFC8BB';
+        d.style.color = on ? '#fff' : '#A89F8E';
+      });
+      lines.forEach((l, i) => { l.style.background = i < idx ? '#00A0A0' : '#E6E1D8'; });
+    };
+    // scroll spy
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const idx = sections.indexOf(e.target);
+          if (idx >= 0) setActive(idx);
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach((s) => spy.observe(s));
+    // reveal animations
+    // smooth in-page navigation (host may not honor native hash anchors)
+    const scrollRoot = () => {
+      const de = document.scrollingElement || document.documentElement;
+      // pick whichever element actually scrolls
+      if (de && de.scrollHeight > de.clientHeight + 4) return de;
+      let el = this.rootEl;
+      while (el) { if (el.scrollHeight > el.clientHeight + 4) return el; el = el.parentElement; }
+      return de;
+    };
+    const anchors = [...root.querySelectorAll('a[href^="#"]')];
+    anchors.forEach((a) => {
+      a.addEventListener('click', (ev) => {
+        const id = a.getAttribute('href').slice(1);
+        const target = root.querySelector('#' + CSS.escape(id));
+        if (!target) return;
+        ev.preventDefault();
+        const sr = scrollRoot();
+        const top = target.getBoundingClientRect().top - sr.getBoundingClientRect().top + sr.scrollTop;
+        sr.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+    const reveals = [...root.querySelectorAll('[data-reveal]')];
+    const rev = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          rev.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach((r) => rev.observe(r));
+    this.initDash1(root);
+  }
+
+  initDash1(root) {
+    const card = root.querySelector('#dash1');
+    const body = root.querySelector('#dash1-body');
+    if (!card || !body) return;
+    const TOTAL = 177;
+    const pct = (v) => Math.round((v / TOTAL) * 1000) / 10;
+    const paisesFull = [
+      ['Chile', 7, 59], ['Org. internacionales / regionales', 7, 40], ['Alemania', 13, 28],
+      ['Estados Unidos', 3, 17], ['Suiza', 1, 6], ['España', 1, 4], ['Italia', 3, 4],
+      ['Austria', 2, 3], ['Japón', 2, 3], ['Países Bajos', 1, 3], ['Reino Unido', 2, 3],
+      ['Francia', 2, 2], ['Irlanda', 2, 2], ['Turquía', 1, 2], ['Hungría', 1, 1],
+    ];
+    const regiones = [
+      ['Chile', 59, '#007E80'], ['Europa', 69, '#00A0A0'],
+      ['Latinoamérica y regional', 29, '#EF7A00'], ['Norteamérica', 17, '#F2A24E'], ['Asia', 3, '#6B7680'],
+    ];
+    const inst = [
+      ['ANID', 44, 'Chile'], ['CLACSO', 22, 'Latinoamérica'], ['Spencer Foundation', 12, 'EE.UU.'],
+      ['Comisión Europea', 8, 'Unión Europea'], ['Gobierno de Suiza', 6, 'Suiza'], ['OEA', 6, 'Internacional'],
+      ['IZEA', 5, 'Alemania'], ['Freiburg Institute', 4, 'Alemania'], ['Folger Institute', 4, 'EE.UU.'],
+      ['Fundación Carolina', 4, 'España'], ['Ciencia pública', 4, 'Chile'], ['Otras 37 instituciones', 58, ''],
+    ];
+
+    // tooltip (single, fixed)
+    let tip = document.getElementById('dc-tip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = 'dc-tip';
+      tip.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;background:#3A4450;color:#fff;font:600 11.5px/1.4 Archivo,sans-serif;padding:8px 11px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.28);opacity:0;transition:opacity .12s;transform:translate(-50%,-118%);white-space:nowrap;max-width:260px';
+      document.body.appendChild(tip);
+    }
+    const showTip = (html, x, y) => { tip.innerHTML = html; tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.style.opacity = '1'; };
+    const hideTip = () => { tip.style.opacity = '0'; };
+
+    const barChart = (rows, max, opts = {}) => {
+      const { accentFirst = true, mutedLast = false, showMeta = false } = opts;
+      return '<div style="display:flex;flex-direction:column;gap:2px">' + rows.map((r, i) => {
+        const label = r[0], val = r[1], meta = r[2] || '';
+        const w = (val / max) * 100;
+        const color = (mutedLast && i === rows.length - 1) ? '#C7BEAF' : (accentFirst && i === 0 ? '#EF7A00' : '#00A0A0');
+        const tipHtml = label + ' — <b>' + val + '</b> convocatorias · ' + pct(val) + '%' + (meta ? ' · ' + meta : '');
+        return '<div class="barrow" data-tip="' + tipHtml + '" style="display:grid;grid-template-columns:minmax(116px,196px) 1fr 40px;align-items:center;gap:12px;padding:7px 6px;border-radius:6px;cursor:default;transition:background .15s" onmouseover="this.style.background=&quot;#F1EEE7&quot;" onmouseout="this.style.background=&quot;transparent&quot;">' +
+          '<span style="font:500 13.5px \'Spectral\',serif;color:#3A4450;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + label + '</span>' +
+          '<span style="height:14px;background:#EAE4DA;border-radius:7px;overflow:hidden"><span data-grow="' + w + '%" style="display:block;height:100%;width:0;background:' + color + ';border-radius:7px;transition:width .9s cubic-bezier(.22,1,.36,1)"></span></span>' +
+          '<span style="font:600 13px \'IBM Plex Mono\',monospace;color:#3A4450;text-align:right">' + val + '</span>' +
+        '</div>';
+      }).join('') + '</div>';
+    };
+
+    const regionView = () => {
+      const seg = regiones.map(([l, v, c]) => '<span class="barrow" data-tip="' + l + ' — <b>' + v + '</b> · ' + pct(v) + '%" data-grow="' + (v / TOTAL * 100) + '%" style="display:block;height:100%;width:0;background:' + c + ';transition:width .9s cubic-bezier(.22,1,.36,1);cursor:default" onmouseover="this.style.filter=&quot;brightness(1.09)&quot;" onmouseout="this.style.filter=&quot;none&quot;"></span>').join('');
+      const legend = regiones.map(([l, v, c]) => '<div style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:3px;background:' + c + ';flex:none"></span><span style="font:500 13px \'Spectral\',serif;color:#3A4450;flex:1">' + l + '</span><span style="font:600 12.5px \'IBM Plex Mono\',monospace;color:#5A6470">' + v + '</span></div>').join('');
+      return '<div style="display:flex;height:40px;border-radius:9px;overflow:hidden;margin-bottom:20px;background:#EAE4DA">' + seg + '</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px 24px">' + legend + '</div>';
+    };
+
+    const paisRows = paisesFull.map(([c, i, v]) => [c, v, i + ' instituciones']);
+    const views = {
+      region: regionView,
+      pais: () => barChart(paisRows, 59, { accentFirst: true }),
+      inst: () => barChart(inst, 44, { accentFirst: true, mutedLast: true }),
+    };
+
+    const wire = () => {
+      [...body.querySelectorAll('[data-tip]')].forEach((el) => {
+        el.addEventListener('mousemove', (e) => showTip(el.getAttribute('data-tip'), e.clientX, e.clientY));
+        el.addEventListener('mouseleave', hideTip);
+      });
+      requestAnimationFrame(() => { [...body.querySelectorAll('[data-grow]')].forEach((el) => { el.style.width = el.getAttribute('data-grow'); }); });
+    };
+
+    const tabs = [...card.querySelectorAll('[data-view]')];
+    const set = (view) => {
+      tabs.forEach((t) => { const on = t.getAttribute('data-view') === view; t.style.background = on ? '#00A0A0' : '#EDE8DF'; t.style.color = on ? '#fff' : '#8A8272'; });
+      body.innerHTML = views[view]();
+      wire();
+    };
+    tabs.forEach((t) => t.addEventListener('click', () => set(t.getAttribute('data-view'))));
+    set('region');
+
+    // fill printable table
+    const pb = root.querySelector('#dash1-print-body');
+    if (pb) {
+      pb.innerHTML = paisesFull.map(([c, i, v]) => '<tr style="border-bottom:1px solid #EFEAE1"><td style="padding:5px 0;font:400 12.5px \'Spectral\',serif;color:#3A4450">' + c + '</td><td style="text-align:right;font:400 11px \'IBM Plex Mono\',monospace;color:#6A6355">' + i + '</td><td style="text-align:right;font:600 11px \'IBM Plex Mono\',monospace;color:#3A4450">' + v + '</td></tr>').join('');
+    }
+  }
+}
+</script>
+</body>
+</html>
