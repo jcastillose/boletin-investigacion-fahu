@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<script src="./support.js?v=202607090133"></script>
+<script src="./support.js?v=202607090203"></script>
 </head>
 <body>
 <x-dc>
@@ -34,7 +34,7 @@
     .print-only{display:block !important}
   }
 </style>
-<script src="assets/e_lineas.js?v=202607090133"></script>
+<script src="assets/e_lineas.js?v=202607090203"></script>
 <script>
 /* Red de seguridad: si el runtime de render no toma control (CDN de React/Babel
    bloqueado o lento, caché servida a medias, support.js no disponible), revelamos
@@ -109,7 +109,7 @@
             <blockquote style="margin:22px 0 0;padding:6px 0 6px 20px;border-left:4px solid #EF7A00;font:500 italic clamp(16px,1.9vw,20px)/1.5 'Spectral',serif;color:#3A4450">“Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.”</blockquote>
           </div>
           <div style="position:relative;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #E6E1D8">
-            <img src="assets/img/intro-foto.webp?v=202607090133" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+            <img src="assets/img/intro-foto.webp?v=202607090203" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@
                 <div style="position:relative;background:#26282B;border-radius:16px;padding:11px;box-shadow:0 14px 34px rgba(0,0,0,.20),inset 0 0 0 1px rgba(255,255,255,.05)">
                   <div style="position:absolute;top:4.5px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#43464A;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)"></div>
                   <div style="position:relative;aspect-ratio:16/10;border-radius:5px;overflow:hidden;background:#0B0C0D">
-                    <img src="assets/img/site-becas.webp?v=202607090133" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                    <img src="assets/img/site-becas.webp?v=202607090203" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
                   </div>
                 </div>
                 <div style="position:relative;height:13px;margin:0 -7%;background:linear-gradient(180deg,#E4E7E9 0%,#C6CBCE 52%,#AAB0B4 100%);border-radius:0 0 12px 12px;box-shadow:0 5px 9px rgba(0,0,0,.13)">
@@ -882,25 +882,27 @@ class Component extends DCLogic {
     E.units.forEach((u) => { (byArea[u.ocdeArea] || (byArea[u.ocdeArea] = [])).push(u); });
     Object.keys(byArea).forEach((k) => byArea[k].sort((a, b) => b.nLines - a.nLines));
     const totalLines = E.units.reduce((a, u) => a + u.nLines, 0);
-    let acc = 0; const stopsArr = [];
+    let acc = 0; const stopsArr = []; const pieSegs = [];
     ['5', '6'].forEach((k) => {
+      const areaNm = k === '5' ? 'Ciencias Sociales' : 'Humanidades';
       byArea[k].forEach((u, wi) => {
         const color = shadeMap[k][wi % shadeMap[k].length];
         const pct = u.nLines / totalLines * 100;
         stopsArr.push(color + ' ' + acc.toFixed(2) + '% ' + (acc + pct).toFixed(2) + '%');
+        pieSegs.push({ idx: pieSegs.length, start: acc, end: acc + pct, color: color, pct: pct, area: k, areaName: areaNm, sub: u.ocdeSub, subName: u.ocdeSubName });
         acc += pct;
       });
     });
     const pieEl = root.querySelector('#e-pie');
     if (pieEl) {
       pieEl.innerHTML = '<div style="position:relative;width:186px;height:186px">'
-        + '<div style="width:186px;height:186px;border-radius:50%;background:conic-gradient(' + stopsArr.join(', ') + ')"></div>'
+        + '<div data-pie-disc style="width:186px;height:186px;border-radius:50%;background:conic-gradient(' + stopsArr.join(', ') + ')"></div>'
         + '<div style="position:absolute;inset:33px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:inset 0 0 0 1px #EFEAE1">'
         + '<span style="font:800 15px Archivo,sans-serif;color:#3A4450">2 áreas</span>'
         + '<span style="font:500 11px \'Spectral\',serif;color:#8A8272">7 subáreas OCDE</span>'
         + '</div></div>';
     }
-    let leg = '';
+    let leg = ''; let segN = 0;
     ['5', '6'].forEach((k, ki) => {
       const arr = byArea[k];
       const areaPct = arr.reduce((a, u) => a + u.nLines, 0) / totalLines * 100;
@@ -911,7 +913,7 @@ class Component extends DCLogic {
       arr.forEach((u, wi) => {
         const color = shadeMap[k][wi % shadeMap[k].length];
         const pct = u.nLines / totalLines * 100;
-        leg += '<div style="display:grid;grid-template-columns:13px 1fr 46px;align-items:center;gap:9px;padding:3px 0">'
+        leg += '<div data-seg="' + (segN++) + '" style="display:grid;grid-template-columns:13px 1fr 46px;align-items:center;gap:9px;padding:3px 6px;border-radius:6px;transition:background .12s">'
           + '<span style="width:12px;height:12px;border-radius:3px;background:' + color + '"></span>'
           + '<span style="font:500 12.5px \'Spectral\',serif;color:#3A4450">OCDE ' + u.ocdeSub + ' · ' + u.ocdeSubName + '</span>'
           + '<span style="font:600 12.5px \'IBM Plex Mono\',monospace;color:#3A4450;text-align:right">' + pct.toFixed(1).replace('.', ',') + '%</span></div>';
@@ -919,6 +921,32 @@ class Component extends DCLogic {
     });
     const legEl = root.querySelector('#e-pie-legend');
     if (legEl) legEl.innerHTML = leg;
+    // Hover sobre el donut: detecta el segmento por el ángulo del cursor, muestra la
+    // subárea/área OCDE asociada y resalta su fila en la leyenda.
+    const disc = pieEl && pieEl.querySelector('[data-pie-disc]');
+    if (disc && pieSegs.length) {
+      const rows = legEl ? [...legEl.querySelectorAll('[data-seg]')] : [];
+      const highlight = (seg) => rows.forEach((r) => { r.style.background = (seg && +r.getAttribute('data-seg') === seg.idx) ? '#F4F1EA' : 'transparent'; });
+      const segAt = (e) => {
+        const rc = disc.getBoundingClientRect();
+        const dx = e.clientX - (rc.left + rc.width / 2), dy = e.clientY - (rc.top + rc.height / 2);
+        const dist = Math.sqrt(dx * dx + dy * dy), R = rc.width / 2;
+        if (dist > R || dist < R * (60 / 93)) return null;
+        const p = ((Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360) / 360 * 100;
+        return pieSegs.find((s) => p >= s.start && p < s.end) || null;
+      };
+      disc.addEventListener('mousemove', (e) => {
+        const s = segAt(e);
+        if (!s) { tip.style.opacity = '0'; disc.style.cursor = 'default'; highlight(null); return; }
+        disc.style.cursor = 'pointer';
+        tip.innerHTML = '<span style="color:' + s.color + '">■</span> OCDE ' + s.sub + ' · ' + s.subName
+          + '<br><b>' + s.pct.toFixed(1).replace('.', ',') + '%</b> de las líneas'
+          + '<br><span style="opacity:.82;font-weight:500">Área ' + s.area + ' · ' + s.areaName + '</span>';
+        tip.style.left = e.clientX + 'px'; tip.style.top = e.clientY + 'px'; tip.style.opacity = '1';
+        highlight(s);
+      });
+      disc.addEventListener('mouseleave', () => { tip.style.opacity = '0'; disc.style.cursor = 'default'; highlight(null); });
+    }
     // Prevalencia
     const top = E.topLines.slice(0, 15);
     const maxc = top[0][1];
@@ -1012,11 +1040,11 @@ class Component extends DCLogic {
     const cSub = ['5.3 Cs. de la educación', '6.1 Historia y arqueología', '6.2 Idiomas y literatura', '5.4 Sociología', '5.6 Cs. políticas', '5.1 Psicología', '6.3 Filosofía y religión', '5.8 Periodismo y com.', '5.7 Geografía', '3.3 Cs. de la salud', '6.4 Arte', '5.5 Derecho', '5.2 Economía y negocios', '3.2 Medicina clínica', '4.1 Agricultura', '3.1 Medicina básica', '6.5 Otras humanidades'];
     const cM = [[69, 41, 23, 5, 69, 1, 1], [5, 9, 73, 3, 0, 2, 0], [2, 80, 7, 3, 0, 0, 0], [36, 3, 18, 6, 5, 2, 0], [1, 0, 6, 12, 0, 31, 1], [31, 1, 0, 2, 0, 1, 1], [4, 2, 1, 9, 1, 0, 13], [0, 3, 1, 21, 0, 0, 0], [1, 0, 0, 14, 0, 0, 0], [12, 0, 0, 3, 0, 0, 0], [1, 8, 1, 1, 0, 0, 1], [1, 0, 4, 1, 0, 2, 1], [0, 0, 2, 3, 0, 0, 0], [0, 3, 0, 0, 0, 0, 0], [1, 0, 0, 1, 0, 0, 0], [2, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0]];
 
+    let dAng = 0; const donaSegs = area.map(([l, v], i) => { const c = areaCol(l); const a2 = dAng + v / TOTAL * 360; const o = { idx: i, start: dAng, end: a2, color: c, label: l, value: v, pct: pct(v) }; dAng = a2; return o; });
     const dona = () => {
-      let ang = 0;
-      const seg = area.map(([l, v]) => { const c = areaCol(l); const a2 = ang + v / TOTAL * 360; const s = c + ' ' + ang + 'deg ' + a2 + 'deg'; ang = a2; return s; });
-      const legend = area.map(([l, v], i) => '<div class="dtip" data-tip="' + l + '<br><b>' + v + '</b> postulaciones · ' + pct(v) + '% del total<br>' + (i === 0 ? 'área con mayor movilización' : 'N.º' + (i + 1) + ' de 4 áreas OCDE') + '" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:default"><span style="width:11px;height:11px;border-radius:3px;background:' + areaCol(l) + ';flex:none"></span><span style="font:500 12.5px \'Spectral\',serif;color:#3A4450;flex:1">' + l + '</span><span style="font:600 12px \'IBM Plex Mono\',monospace;color:#5A6470">' + v + '</span></div>').join('');
-      return '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><div style="width:130px;height:130px;border-radius:50%;flex:none;background:conic-gradient(' + seg.join(',') + ')"><div style="width:72px;height:72px;background:#fff;border-radius:50%;position:relative;top:29px;left:29px;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:800 20px/1 \'Archivo\',sans-serif;color:#3A4450">671</span><span style="font:500 8.5px \'Archivo\',sans-serif;color:#8A8272;letter-spacing:.03em;margin-top:2px">postulac.</span></div></div><div style="flex:1;min-width:150px">' + legend + '</div></div>';
+      const seg = donaSegs.map((s) => s.color + ' ' + s.start + 'deg ' + s.end + 'deg');
+      const legend = area.map(([l, v], i) => '<div class="dtip" data-dona-seg="' + i + '" data-tip="' + l + '<br><b>' + v + '</b> postulaciones · ' + pct(v) + '% del total<br>' + (i === 0 ? 'área con mayor movilización' : 'N.º' + (i + 1) + ' de 4 áreas OCDE') + '" style="display:flex;align-items:center;gap:8px;margin-bottom:5px;padding:2px 6px;border-radius:6px;transition:background .12s;cursor:default"><span style="width:11px;height:11px;border-radius:3px;background:' + areaCol(l) + ';flex:none"></span><span style="font:500 12.5px \'Spectral\',serif;color:#3A4450;flex:1">' + l + '</span><span style="font:600 12px \'IBM Plex Mono\',monospace;color:#5A6470">' + v + '</span></div>').join('');
+      return '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><div data-dona-disc style="width:130px;height:130px;border-radius:50%;flex:none;background:conic-gradient(' + seg.join(',') + ')"><div style="width:72px;height:72px;background:#fff;border-radius:50%;position:relative;top:29px;left:29px;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:800 20px/1 \'Archivo\',sans-serif;color:#3A4450">671</span><span style="font:500 8.5px \'Archivo\',sans-serif;color:#8A8272;letter-spacing:.03em;margin-top:2px">postulac.</span></div></div><div style="flex:1;min-width:150px">' + legend + '</div></div>';
     };
     const bars = (rows, max, extra, noun) => {
       const nn = noun || 'registro';
@@ -1063,6 +1091,29 @@ class Component extends DCLogic {
     };
 
     root.querySelector('#d-dona').innerHTML = dona();
+    // Hover sobre el donut de Composición · Por Área OCDE: muestra el área bajo el
+    // cursor (postulaciones y % del total) y resalta su fila en la leyenda.
+    const donaEl = root.querySelector('#d-dona [data-dona-disc]');
+    if (donaEl && donaSegs.length) {
+      const dRows = [...wrap.querySelectorAll('#d-dona [data-dona-seg]')];
+      const dHi = (seg) => dRows.forEach((r) => { r.style.background = (seg && +r.getAttribute('data-dona-seg') === seg.idx) ? '#F1EEE7' : 'transparent'; });
+      const dSegAt = (e) => {
+        const rc = donaEl.getBoundingClientRect();
+        const dx = e.clientX - (rc.left + rc.width / 2), dy = e.clientY - (rc.top + rc.height / 2);
+        const dist = Math.sqrt(dx * dx + dy * dy), R = rc.width / 2;
+        if (dist > R || dist < R * (36 / 65)) return null;
+        const deg = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
+        return donaSegs.find((s) => deg >= s.start && deg < s.end) || null;
+      };
+      donaEl.addEventListener('mousemove', (e) => {
+        const s = dSegAt(e);
+        if (!s) { hideTip(); donaEl.style.cursor = 'default'; dHi(null); return; }
+        donaEl.style.cursor = 'pointer';
+        showTip('<span style="color:' + s.color + '">■</span> ' + s.label + '<br><b>' + s.value + '</b> postulaciones · ' + s.pct + '% del total', e.clientX, e.clientY);
+        dHi(s);
+      });
+      donaEl.addEventListener('mouseleave', () => { hideTip(); donaEl.style.cursor = 'default'; dHi(null); });
+    }
     root.querySelector('#d-sub').innerHTML = bars(sub, 209, '+ ' + subOtras + ' postulaciones en otras subáreas OCDE', 'subárea');
     root.querySelector('#d-perfil').innerHTML = perfil();
     root.querySelector('#d-tipo').innerHTML = bars(tipo, 228, '', 'instrumento');
