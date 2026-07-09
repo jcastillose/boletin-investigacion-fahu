@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script src="./support.js?v=202607090125"></script>
 </head>
 <body>
 <x-dc>
@@ -31,7 +34,24 @@
     .print-only{display:block !important}
   }
 </style>
-<script src="assets/e_lineas.js"></script>
+<script src="assets/e_lineas.js?v=202607090125"></script>
+<script>
+/* Red de seguridad: si el runtime de render no toma control (CDN de React/Babel
+   bloqueado o lento, caché servida a medias, support.js no disponible), revelamos
+   igualmente todo el contenido para que el boletín nunca quede en blanco en la web. */
+(function () {
+  function reveal() {
+    try {
+      var els = document.querySelectorAll('[data-reveal]');
+      for (var i = 0; i < els.length; i++) { els[i].style.opacity = '1'; els[i].style.transform = 'none'; }
+    } catch (e) {}
+  }
+  function check() { if (!window.__DC_READY) reveal(); }
+  setTimeout(check, 3500);
+  setTimeout(check, 8000);
+  window.addEventListener('load', function () { setTimeout(check, 1500); });
+})();
+</script>
 </helmet>
 <div ref="{{ setRoot }}">
 
@@ -89,7 +109,7 @@
             <blockquote style="margin:22px 0 0;padding:6px 0 6px 20px;border-left:4px solid #EF7A00;font:500 italic clamp(16px,1.9vw,20px)/1.5 'Spectral',serif;color:#3A4450">“Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.”</blockquote>
           </div>
           <div style="position:relative;min-height:320px;border-radius:14px;overflow:hidden;border:1px solid #E6E1D8">
-            <img src="assets/img/intro-foto.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+            <img src="assets/img/intro-foto.webp?v=202607090125" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           </div>
         </div>
       </div>
@@ -135,7 +155,7 @@
                 <div style="position:relative;background:#26282B;border-radius:16px;padding:11px;box-shadow:0 14px 34px rgba(0,0,0,.20),inset 0 0 0 1px rgba(255,255,255,.05)">
                   <div style="position:absolute;top:4.5px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#43464A;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)"></div>
                   <div style="position:relative;aspect-ratio:16/10;border-radius:5px;overflow:hidden;background:#0B0C0D">
-                    <img src="assets/img/site-becas.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                    <img src="assets/img/site-becas.webp?v=202607090125" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
                   </div>
                 </div>
                 <div style="position:relative;height:13px;margin:0 -7%;background:linear-gradient(180deg,#E4E7E9 0%,#C6CBCE 52%,#AAB0B4 100%);border-radius:0 0 12px 12px;box-shadow:0 5px 9px rgba(0,0,0,.13)">
@@ -750,6 +770,7 @@ class Component extends DCLogic {
     this.initDash1(root);
     this.initDash1d(root);
     this.initSub1e(root);
+    window.__DC_READY = true;
   }
 
   initDash1(root) {
